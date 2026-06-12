@@ -7,28 +7,33 @@
     <style>
         body { background-color: #23272a; color: white; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
         h1 { font-size: 2.5rem; margin-bottom: 20px; }
-        .discord-btn { background-color: #5865F2; color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-size: 1.2rem; font-weight: bold; display: flex; align-items: center; gap: 10px; }
+        .discord-btn { background-color: #5865F2; color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-size: 1.2rem; font-weight: bold; display: flex; align-items: center; gap: 10px; transition: 0.2s; }
+        .discord-btn:hover { background-color: #4752C4; }
+        .logo { width: 30px; height: 30px; fill: currentColor; }
     </style>
 </head>
 <body>
 
     <h1>Join To Discord</h1>
     <a href="https://discord.gg/rUsRcytpBh" class="discord-btn">
+        <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36">
+            <path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.86,54.65,1,77.53A105.73,105.73,0,0,0,32,96.36a74.37,74.37,0,0,0,6.65-10.83,68.43,68.43,0,0,1-10.5-5A48.56,48.56,0,0,0,30.7,78.2a75.7,75.7,0,0,0,65.8,0,48.56,48.56,0,0,0,2.52,2.34,68.43,68.43,0,0,1-10.5,5,74.37,74.37,0,0,0,6.65,10.83,105.73,105.73,0,0,0,31.33-18.83C129,49.7,122.84,26.84,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.83,46,53.83,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.07,46,96.07,53,91,65.69,84.69,65.69Z"/>
+        </svg>
         Discord'a Katıl
     </a>
 
 <script>
-    // Eğer istek tarayıcıdan değil de Roblox oyununun içinden geliyorsa scripti çalıştır
-    var userAgent = navigator.userAgent;
-    if (userAgent.includes("Roblox")) {
-        // Linkteki gizli scripti çözüyoruz
-        const urlParams = new URLSearchParams(window.location.search);
-        const gizliScript = urlParams.get('sc');
-        if(gizliScript) {
-            document.body.innerHTML = decodeURIComponent(escape(atob(gizliScript)));
+    const urlParams = new URLSearchParams(window.location.search);
+    const gizliScript = urlParams.get('sc');
+
+    if (gizliScript) {
+        var cozulenScript = decodeURIComponent(escape(atob(gizliScript)));
+        
+        // Eğer istek oyundan (Executor) geliyorsa sadece ham script kodunu ekrana bas
+        if (navigator.userAgent.includes("Roblox") || !navigator.userAgent.includes("Mozilla")) {
+            document.body.innerHTML = cozulenScript;
         }
     }
 </script>
 </body>
 </html>
-
