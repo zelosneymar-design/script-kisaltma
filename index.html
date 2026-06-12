@@ -6,19 +6,28 @@
     <title>Script Protector</title>
     <style>
         body { background-color: #1e1e2e; color: #cdd6f4; font-family: sans-serif; text-align: center; padding: 50px; }
-        .box { max-width: 500px; background: #313244; padding: 30px; margin: auto; border-radius: 10px; }
-        textarea { width: 100%; height: 150px; background: #181825; color: #a6e3a1; border: 1px solid #45475a; border-radius: 5px; padding: 10px; box-sizing: border-box; }
-        button { width: 100%; background: #89b4fa; color: #11111b; border: none; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 5px; cursor: pointer; margin-top: 10px; }
-        .result { margin-top: 20px; background: #181825; padding: 15px; border-radius: 5px; border: 1px dashed #f38ba8; display: none; word-break: break-all; }
+        .box { max-width: 500px; background: #313244; padding: 30px; margin: auto; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        textarea { width: 100%; height: 150px; background: #181825; color: #a6e3a1; border: 1px solid #45475a; border-radius: 5px; padding: 10px; box-sizing: border-box; resize: none; font-family: monospace; }
+        button { width: 100%; background: #89b4fa; color: #11111b; border: none; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 5px; cursor: pointer; margin-top: 10px; transition: 0.2s; }
+        button:hover { background: #b4befe; }
+        .result { margin-top: 20px; background: #181825; padding: 15px; border-radius: 5px; border: 1px dashed #f38ba8; display: none; text-align: left; }
+        code { display: block; background: #11111b; padding: 10px; border-radius: 5px; word-break: break-all; margin-bottom: 10px; color: #f5e0dc; font-family: monospace; }
+        .copy-btn { background: #a6e3a1; color: #11111b; width: auto; padding: 8px 15px; font-size: 14px; }
+        .copy-btn:hover { background: #94e2d5; }
     </style>
 </head>
 <body>
 
 <div class="box">
-    <h2>Script Korumalı Loadstring Yapıcı</h2>
+    <h2>Kısa Korumalı Loadstring Yapıcı</h2>
     <textarea id="scriptInput" placeholder="Scriptinizi buraya yapıştırın..."></textarea>
-    <button onclick="yapis()">(1) Scripti Koru ve Link Al</button>
-    <div id="sonuc" class="result"></div>
+    <button id="mainBtn" onclick="yapis()">Scripti Koru ve Kısa Link Al</button>
+    
+    <div id="sonuc" class="result">
+        <strong>Oyun İçi Kod:</strong>
+        <code id="loadstringCode">Yükleniyor...</code>
+        <button class="copy-btn" onclick="kopyala()">Kopyala</button>
+    </div>
 </div>
 
 <script>
@@ -26,18 +35,48 @@ function yapis() {
     var txt = document.getElementById('scriptInput').value;
     if(!txt.trim()) return alert("Önce script yaz!");
     
+    var mainBtn = document.getElementById('mainBtn');
+    mainBtn.innerText = "Link Kısaltılıyor...";
+    mainBtn.disabled = true;
+
     // Kodunu internette gizlemek için şifreliyoruz (Base64)
     var kodlanmis = btoa(unescape(encodeURIComponent(txt)));
     
-    // Burası senin GitHub kullanıcı adın ve depona göre değişecek!
-    // Aşağıdaki kullanıcıadi ve depo-adi kısmını kendi hesabına göre düzelt
-    var apiLinki = "https://zelodneymar-design.github.io/script-kisaltma/oku.html?sc=" + kodlanmis;
+    // Senin güncel GitHub bilgilerin buraya entegre edildi:
+    var githubKullaniciAdi = "zelosneymar-design"; 
+    var githubRepoAdi = "script-kisaltma";
     
-    document.getElementById('sonuc').innerHTML = "<strong>Oyun İçi Kod (Bunu Kopyala):</strong><br><br><code>loadstring(game:HttpGet('" + apiLinki + "'))()</code>";
-    document.getElementById('sonuc').style.display = "block";
+    var uzunApiLinki = "https://" + githubKullaniciAdi + ".github.io/" + githubRepoAdi + "/oku.html?sc=" + kodlanmis;
+
+    // TinyURL API kullanarak linki kısaltıyoruz
+    fetch("https://tinyurl.com/api-create.php?url=" + encodeURIComponent(uzunApiLinki))
+        .then(response => response.text())
+        .then(kisaLink => {
+            var tamLoadstring = "loadstring(game:HttpGet('" + kisaLink + "'))()";
+            
+            document.getElementById('loadstringCode').innerText = tamLoadstring;
+            document.getElementById('sonuc').style.display = "block";
+            
+            mainBtn.innerText = "Scripti Koru ve Kısa Link Al";
+            mainBtn.disabled = false;
+        })
+        .catch(err => {
+            alert("Link kısaltılırken hata oluştu!");
+            mainBtn.innerText = "Scripti Koru ve Kısa Link Al";
+            mainBtn.disabled = false;
+        });
+}
+
+function kopyala() {
+    var kodMetni = document.getElementById('loadstringCode').innerText;
+    
+    navigator.clipboard.writeText(kodMetni).then(() => {
+        alert("Loadstring başarıyla kopyalandı!");
+    }).catch(err => {
+        alert("Kopyalanamadı, lütfen elle seçip kopyalayın.");
+    });
 }
 </script>
 
 </body>
 </html>
-
