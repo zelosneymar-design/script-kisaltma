@@ -1,5 +1,23 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join To Discord</title>
+    <style>
+        body { background-color: #23272a; color: white; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        h1 { font-size: 2.5rem; margin-bottom: 20px; }
+        .discord-btn { background-color: #5865F2; color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-size: 1.2rem; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <h1>Join To Discord</h1>
+    <a href="https://discord.gg/rUsRcytpBh" class="discord-btn">Discord'a Katıl</a>
+
 <script>
 const SB_URL = "https://plvcfmcechydvppxikko.supabase.co";
+// BURAYA DA O UPUZUN sb_public... ŞİFRENİ YAPIŞTIR KANKA:
 const SB_KEY = "sb_publishable_5B58MTUMnzM7uRa18SIEHg_ZtslXxt1";
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -8,11 +26,15 @@ const scriptId = urlParams.get('id');
 if (scriptId) {
     fetch(SB_URL + "/rest/v1/scripts?id=eq." + scriptId, {
         method: "GET",
-        headers: { "apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY }
+        headers: {
+            "apikey": SB_KEY,
+            "Authorization": "Bearer " + SB_KEY
+        }
     })
     .then(res => res.json())
     .then(data => {
         if(data && data[0] && data[0].kod) {
+            // Delta veya normal tarayıcı istek attığında sitenin tüm HTML'ini temizleyip saf kodu basıyoruz:
             document.open("text/plain");
             document.write(data[0].kod);
             document.close();
@@ -20,3 +42,5 @@ if (scriptId) {
     });
 }
 </script>
+</body>
+</html>
