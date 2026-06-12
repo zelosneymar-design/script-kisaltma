@@ -17,14 +17,13 @@
 
 <script>
 const SB_URL = "https://plvcfmcechydvppxikko.supabase.co";
-// BURAYA DA AYNI ŞEKİLDE O UPUZUN sb_public... ŞİFRENİ YAPIŞTIR KANKA:
+// Kendi sb_public... şifreni buraya tırnakların içine yaz kanka:
 const SB_KEY = "sb_publishable_5B58MTUMnzM7uRa18SIEHg_ZtslXxt1";
 
 const urlParams = new URLSearchParams(window.location.search);
 const scriptId = urlParams.get('id');
 
 if (scriptId) {
-    // Delta ve tüm executorlar için engel kaldırıldı, direkt veri tabanından kodu çeker
     fetch(SB_URL + "/rest/v1/scripts?id=eq." + scriptId, {
         method: "GET",
         headers: {
@@ -35,6 +34,7 @@ if (scriptId) {
     .then(res => res.json())
     .then(data => {
         if(data.length > 0) {
+            // Delta'nın sayfadaki kodu ham ve eksiksiz çekebilmesi için temiz metne çeviriyoruz:
             document.open();
             document.write(data[0].kod);
             document.close();
