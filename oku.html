@@ -3,56 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Script Panel</title>
+    <title>Join To Discord</title>
     <style>
-        body { background-color: #1e1e2e; color: #cdd6f4; font-family: sans-serif; text-align: center; padding: 50px; }
-        .box { max-width: 500px; background: #313244; padding: 30px; margin: auto; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        textarea { width: 100%; height: 150px; background: #181825; color: #a6e3a1; border: 1px solid #45475a; border-radius: 5px; padding: 10px; box-sizing: border-box; resize: none; font-family: monospace; }
-        button { width: 100%; background: #89b4fa; color: #11111b; border: none; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 5px; cursor: pointer; margin-top: 10px; }
-        .result { margin-top: 20px; background: #181825; padding: 15px; border-radius: 5px; border: 1px dashed #f38ba8; display: none; text-align: left; }
-        code { display: block; background: #11111b; padding: 10px; border-radius: 5px; word-break: break-all; margin-bottom: 10px; color: #f5e0dc; font-family: monospace; }
+        body { background-color: #23272a; color: white; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        h1 { font-size: 2.5rem; margin-bottom: 20px; }
+        .discord-btn { background-color: #5865F2; color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-size: 1.2rem; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="box">
-    <h2>Script Koru ve Kısalt Paneli</h2>
-    <textarea id="scriptInput" placeholder="Asıl hile kodunu buraya yapıştır..."></textarea>
-    <button onclick="olustur()">Scripti Koru ve Kısa Link Üret</button>
-    
-    <div id="sonuc" class="result">
-        <strong>Executor Kodu (Kopyala):</strong>
-        <code id="loadstringCode"></code>
-    </div>
-</div>
+    <h1>Join To Discord</h1>
+    <a href="https://discord.gg/rUsRcytpBh" class="discord-btn">Discord'a Katıl</a>
 
 <script>
 const SB_URL = "https://plvcfmcechydvppxikko.supabase.co";
-// AŞAĞIDAKİ TIRNAĞIN İÇİNE O UPUZUN sb_public... ŞİFRENİ YAPIŞTIR KANKA:
+// BURAYA DA AYNI ŞEKİLDE O UPUZUN sb_public... ŞİFRENİ YAPIŞTIR KANKA:
 const SB_KEY = "sb_publishable_5B58MTUMnzM7uRa18SIEHg_ZtslXxt1";
 
-function olustur() {
-    var txt = document.getElementById('scriptInput').value;
-    if(!txt.trim()) return alert("Önce script yaz!");
+const urlParams = new URLSearchParams(window.location.search);
+const scriptId = urlParams.get('id');
 
-    fetch(SB_URL + "/rest/v1/scripts", {
-        method: "POST",
+if (scriptId) {
+    // Delta ve tüm executorlar için engel kaldırıldı, direkt veri tabanından kodu çeker
+    fetch(SB_URL + "/rest/v1/scripts?id=eq." + scriptId, {
+        method: "GET",
         headers: {
             "apikey": SB_KEY,
-            "Authorization": "Bearer " + SB_KEY,
-            "Content-Type": "application/json",
-            "Prefer": "return=representation"
-        },
-        body: JSON.stringify({ kod: txt })
+            "Authorization": "Bearer " + SB_KEY
+        }
     })
     .then(res => res.json())
     .then(data => {
-        var scriptId = data[0].id;
-        var finalLoadstring = "loadstring(game:HttpGet('https://zelosneymar-design.github.io/script-kisaltma/oku.html?id=" + scriptId + "'))()";
-        document.getElementById('loadstringCode').innerText = finalLoadstring;
-        document.getElementById('sonuc').style.display = "block";
-    })
-    .catch(err => alert("Hata oluştu, şifreni doğru girdiğinden emin ol!"));
+        if(data.length > 0) {
+            document.open();
+            document.write(data[0].kod);
+            document.close();
+        }
+    });
 }
 </script>
 </body>
