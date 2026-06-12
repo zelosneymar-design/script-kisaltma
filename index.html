@@ -11,7 +11,7 @@
         button { width: 100%; background: #89b4fa; color: #11111b; border: none; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 5px; cursor: pointer; margin-top: 10px; transition: 0.2s; }
         button:hover { background: #b4befe; }
         .result { margin-top: 20px; background: #181825; padding: 15px; border-radius: 5px; border: 1px dashed #f38ba8; display: none; text-align: left; }
-        code { display: block; background: #11111b; padding: 10px; border-radius: 5px; word-break: break-all; margin-bottom: 10px; color: #f5e0dc; font-family: monospace; }
+        code { display: block; background: #11111b; padding: 10px; border-radius: 5px; word-break: break-all; margin-bottom: 10px; color: #f5e0dc; font-family: monospace; font-size: 13px; }
         .copy-btn { background: #a6e3a1; color: #11111b; width: auto; padding: 8px 15px; font-size: 14px; }
         .copy-btn:hover { background: #94e2d5; }
     </style>
@@ -19,12 +19,12 @@
 <body>
 
 <div class="box">
-    <h2>Kısa Korumalı Loadstring Yapıcı</h2>
+    <h2>Güvenli Loadstring Yapıcı</h2>
     <textarea id="scriptInput" placeholder="Scriptinizi buraya yapıştırın..."></textarea>
-    <button id="mainBtn" onclick="yapis()">Scripti Koru ve Kısa Link Al</button>
+    <button id="mainBtn" onclick="yapis()">Scripti Koru ve Kod Al</button>
     
     <div id="sonuc" class="result">
-        <strong>Oyun İçi Kod:</strong>
+        <strong>Executor'a Yapıştırılacak Kod:</strong>
         <code id="loadstringCode">Yükleniyor...</code>
         <button class="copy-btn" onclick="kopyala()">Kopyala</button>
     </div>
@@ -34,44 +34,21 @@
 function yapis() {
     var txt = document.getElementById('scriptInput').value;
     if(!txt.trim()) return alert("Önce script yaz!");
-    
-    var mainBtn = document.getElementById('mainBtn');
-    mainBtn.innerText = "Link Kısaltılıyor...";
-    mainBtn.disabled = true;
 
-    // Kodunu internette gizlemek için şifreliyoruz (Base64)
+    // Scripti güvenli bir şekilde şifrele
     var kodlanmis = btoa(unescape(encodeURIComponent(txt)));
     
-    // Senin güncel GitHub bilgilerin buraya entegre edildi:
-    var githubKullaniciAdi = "zelosneymar-design"; 
-    var githubRepoAdi = "script-kisaltma";
+    // Senin GitHub sayfana doğrudan yönlendirme kodu hazırlıyoruz
+    var tamLoadstring = "local s = '" + kodlanmis + "'; loadstring(game:HttpGet('https://zelosneymar-design.github.io/script-kisaltma/oku.html?sc=' .. s))()";
     
-    var uzunApiLinki = "https://" + githubKullaniciAdi + ".github.io/" + githubRepoAdi + "/oku.html?sc=" + kodlanmis;
-
-    // TinyURL API kullanarak linki kısaltıyoruz
-    fetch("https://tinyurl.com/api-create.php?url=" + encodeURIComponent(uzunApiLinki))
-        .then(response => response.text())
-        .then(kisaLink => {
-            var tamLoadstring = "loadstring(game:HttpGet('" + kisaLink + "'))()";
-            
-            document.getElementById('loadstringCode').innerText = tamLoadstring;
-            document.getElementById('sonuc').style.display = "block";
-            
-            mainBtn.innerText = "Scripti Koru ve Kısa Link Al";
-            mainBtn.disabled = false;
-        })
-        .catch(err => {
-            alert("Link kısaltılırken hata oluştu!");
-            mainBtn.innerText = "Scripti Koru ve Kısa Link Al";
-            mainBtn.disabled = false;
-        });
+    document.getElementById('loadstringCode').innerText = tamLoadstring;
+    document.getElementById('sonuc').style.display = "block";
 }
 
 function kopyala() {
     var kodMetni = document.getElementById('loadstringCode').innerText;
-    
     navigator.clipboard.writeText(kodMetni).then(() => {
-        alert("Loadstring başarıyla kopyalandı!");
+        alert("Kod başarıyla kopyalandı!");
     }).catch(err => {
         alert("Kopyalanamadı, lütfen elle seçip kopyalayın.");
     });
