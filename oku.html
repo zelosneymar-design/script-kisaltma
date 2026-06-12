@@ -1,6 +1,5 @@
 <script>
 const SB_URL = "https://plvcfmcechydvppxikko.supabase.co";
-// Kendi sb_public... şifreni buraya tırnakların içine yapıştır kanka:
 const SB_KEY = "sb_publishable_5B58MTUMnzM7uRa18SIEHg_ZtslXxt1";
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -9,15 +8,11 @@ const scriptId = urlParams.get('id');
 if (scriptId) {
     fetch(SB_URL + "/rest/v1/scripts?id=eq." + scriptId, {
         method: "GET",
-        headers: {
-            "apikey": SB_KEY,
-            "Authorization": "Bearer " + SB_KEY
-        }
+        headers: { "apikey": SB_KEY, "Authorization": "Bearer " + SB_KEY }
     })
     .then(res => res.json())
     .then(data => {
-        if(data.length > 0) {
-            // Ekrandaki her şeyi temizle, Delta için sadece saf hile kodunu yazdır
+        if(data && data[0] && data[0].kod) {
             document.open("text/plain");
             document.write(data[0].kod);
             document.close();
