@@ -1,23 +1,6 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Join To Discord</title>
-    <style>
-        body { background-color: #23272a; color: white; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        h1 { font-size: 2.5rem; margin-bottom: 20px; }
-        .discord-btn { background-color: #5865F2; color: white; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-size: 1.2rem; font-weight: bold; }
-    </style>
-</head>
-<body>
-
-    <h1>Join To Discord</h1>
-    <a href="https://discord.gg/rUsRcytpBh" class="discord-btn">Discord'a Katıl</a>
-
 <script>
 const SB_URL = "https://plvcfmcechydvppxikko.supabase.co";
-// Kendi sb_public... şifreni buraya tırnakların içine yaz kanka:
+// Kendi sb_public... şifreni buraya tırnakların içine yapıştır kanka:
 const SB_KEY = "sb_publishable_5B58MTUMnzM7uRa18SIEHg_ZtslXxt1";
 
 const urlParams = new URLSearchParams(window.location.search);
@@ -34,13 +17,11 @@ if (scriptId) {
     .then(res => res.json())
     .then(data => {
         if(data.length > 0) {
-            // Delta'nın sayfadaki kodu ham ve eksiksiz çekebilmesi için temiz metne çeviriyoruz:
-            document.open();
+            // Ekrandaki her şeyi temizle, Delta için sadece saf hile kodunu yazdır
+            document.open("text/plain");
             document.write(data[0].kod);
             document.close();
         }
     });
 }
 </script>
-</body>
-</html>
