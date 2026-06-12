@@ -27,15 +27,14 @@
 </div>
 
 <script>
-// SUPABASE BİLGİLERİN BURAYA GELİYOR KANKA:
 const SB_URL = "https://plvcfmcechydvppxikko.supabase.co";
+// AŞAĞIDAKİ TIRNAĞIN İÇİNE O UPUZUN sb_public... ŞİFRENİ YAPIŞTIR KANKA:
 const SB_KEY = "sb_publishable_5B58MTUMnzM7uRa18SIEHg_ZtslXxt1";
 
 function olustur() {
     var txt = document.getElementById('scriptInput').value;
     if(!txt.trim()) return alert("Önce script yaz!");
 
-    // Kodu veri tabanına kaydediyoruz
     fetch(SB_URL + "/rest/v1/scripts", {
         method: "POST",
         headers: {
@@ -49,14 +48,11 @@ function olustur() {
     .then(res => res.json())
     .then(data => {
         var scriptId = data[0].id;
-        
-        // Kısa loadstring kodun hazır
         var finalLoadstring = "loadstring(game:HttpGet('https://zelosneymar-design.github.io/script-kisaltma/oku.html?id=" + scriptId + "'))()";
-        
         document.getElementById('loadstringCode').innerText = finalLoadstring;
         document.getElementById('sonuc').style.display = "block";
     })
-    .catch(err => alert("Hata oluştu, veri tabanı ayarlarını kontrol et!"));
+    .catch(err => alert("Hata oluştu, şifreni doğru girdiğinden emin ol!"));
 }
 </script>
 </body>
