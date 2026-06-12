@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Script Protector</title>
+    <style>
+        body { background-color: #1e1e2e; color: #cdd6f4; font-family: sans-serif; text-align: center; padding: 50px; }
+        .box { max-width: 500px; background: #313244; padding: 30px; margin: auto; border-radius: 10px; }
+        textarea { width: 100%; height: 150px; background: #181825; color: #a6e3a1; border: 1px solid #45475a; border-radius: 5px; padding: 10px; box-sizing: border-box; }
+        button { width: 100%; background: #89b4fa; color: #11111b; border: none; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+        .result { margin-top: 20px; background: #181825; padding: 15px; border-radius: 5px; border: 1px dashed #f38ba8; display: none; word-break: break-all; }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Script Korumalı Loadstring Yapıcı</h2>
+    <textarea id="scriptInput" placeholder="Scriptinizi buraya yapıştırın..."></textarea>
+    <button onclick="yapis()">(1) Scripti Koru ve Link Al</button>
+    <div id="sonuc" class="result"></div>
+</div>
+
+<script>
+function yapis() {
+    var txt = document.getElementById('scriptInput').value;
+    if(!txt.trim()) return alert("Önce script yaz!");
+    
+    // Kodunu internette gizlemek için şifreliyoruz (Base64)
+    var kodlanmis = btoa(unescape(encodeURIComponent(txt)));
+    
+    // Burası senin GitHub kullanıcı adın ve depona göre değişecek!
+    // Aşağıdaki kullanıcıadi ve depo-adi kısmını kendi hesabına göre düzelt
+    var apiLinki = "https://KULLANICI_ADIN.github.io/DEPO_ADIN/oku.html?sc=" + kodlanmis;
+    
+    document.getElementById('sonuc').innerHTML = "<strong>Oyun İçi Kod (Bunu Kopyala):</strong><br><br><code>loadstring(game:HttpGet('" + apiLinki + "'))()</code>";
+    document.getElementById('sonuc').style.display = "block";
+}
+</script>
+
+</body>
+</html>
+
