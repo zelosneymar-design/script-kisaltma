@@ -16,7 +16,7 @@
 <body>
 
 <div class="box">
-    <h2>Script Koru ve Kısalt Paneli</h2>
+    <h2>Script Koru ve Kısalt Paneli (Delta Fix)</h2>
     <textarea id="scriptInput" placeholder="Asıl hile kodunu buraya yapıştır..."></textarea>
     <button onclick="olustur()">Scripti Koru ve Kısa Link Üret</button>
     
@@ -28,12 +28,19 @@
 
 <script>
 const SB_URL = "https://plvcfmcechydvppxikko.supabase.co";
-// AŞAĞIDAKİ TIRNAĞIN İÇİNE O UPUZUN sb_public... ŞİFRENİ YAPIŞTIR KANKA:
 const SB_KEY = "sb_publishable_5B58MTUMnzM7uRa18SIEHg_ZtslXxt1";
+
+// Türkçe karakterleri bozmadan Base64'e çeviren fonksiyon
+function utoa(str) {
+    return window.btoa(unescape(encodeURIComponent(str)));
+}
 
 function olustur() {
     var txt = document.getElementById('scriptInput').value;
     if(!txt.trim()) return alert("Önce script yaz!");
+
+    // Kodu güvenli metne dönüştürüyoruz
+    var guvenliKod = utoa(txt);
 
     fetch(SB_URL + "/rest/v1/scripts", {
         method: "POST",
@@ -43,7 +50,7 @@ function olustur() {
             "Content-Type": "application/json",
             "Prefer": "return=representation"
         },
-        body: JSON.stringify({ kod: txt })
+        body: JSON.stringify({ kod: guvenliKod })
     })
     .then(res => res.json())
     .then(data => {
@@ -52,7 +59,7 @@ function olustur() {
         document.getElementById('loadstringCode').innerText = finalLoadstring;
         document.getElementById('sonuc').style.display = "block";
     })
-    .catch(err => alert("Hata oluştu, şifreni doğru girdiğinden emin ol!"));
+    .catch(err => alert("Hata oluştu, şifreni kontrol et!"));
 }
 </script>
 </body>
